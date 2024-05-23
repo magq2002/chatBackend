@@ -5,6 +5,10 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 from nltk.corpus import stopwords
 
+from flask import Blueprint
+
+bot_bp = Blueprint('bot', __name__)
+
 class Bot:
     def __init__(self, corpus_path):
         self.lemmer = nltk.stem.WordNetLemmatizer()

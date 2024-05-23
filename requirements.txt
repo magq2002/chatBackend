@@ -1,2 +1,4 @@
+flask
 nltk
 scikit-learn
+flask-cors
