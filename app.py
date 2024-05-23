@@ -4,10 +4,13 @@ from flask import Flask, request, jsonify
 from flask_cors import CORS
 from blueprints.models.bot import Bot
 
-from blueprints.models.chatbotResponse import chatbotResponse_bp;
+from blueprints.models.chatbotResponse import chatbotResponse_bp
+from blueprints.models.saveFile import saveFile_bp
+
 
 app = Flask(__name__)
 app.register_blueprint(chatbotResponse_bp)
+app.register_blueprint(saveFile_bp)
 
 CORS(app)
 

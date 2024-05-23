@@ -12,6 +12,7 @@ chatbot = Bot(r'static/corpus_deporte.txt')
 @chatbotResponse_bp.route('/chatbot', methods=["POST", "GET"])
 @cross_origin(origins='http://localhost:4200')
 def chatbot_response():
+
     if request.method == "POST":
         if 'file' in request.files:
             upload_file(request.files['file'])
