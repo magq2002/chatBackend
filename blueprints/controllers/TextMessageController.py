@@ -9,6 +9,7 @@ textMessage_bp = Blueprint('textMessage', __name__)
 def post_text_message():
 
     print("hello world")
+    return "Posted text message"
 
 
 @textMessage_bp.route('/get-text-message', methods=['GET'])
@@ -16,6 +17,7 @@ def post_text_message():
 def get_text_message():
 
     print("hello world")
+    return "Text message"
 
 
 @textMessage_bp.route('/get-all-text-messages', methods=['GET'])
@@ -23,3 +25,4 @@ def get_text_message():
 def get_all_text_messages():
 
     print("hello world")
+    return "All text messages"

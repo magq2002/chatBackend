@@ -9,6 +9,7 @@ audioMessage_bp = Blueprint('audioMessage', __name__)
 def post_audio_message():
 
     print("hello world")
+    return "Posted audio message"
 
 
 @audioMessage_bp.route('/get-audio-message', methods=['GET'])
@@ -16,6 +17,7 @@ def post_audio_message():
 def get_audio_message():
 
     print("hello world")
+    return "Audio message"
 
 
 @audioMessage_bp.route('/get-all-audio-messages', methods=['GET'])
@@ -23,3 +25,4 @@ def get_audio_message():
 def get_all_audio_messages():
 
     print("hello world")
+    return "All audio messages"
