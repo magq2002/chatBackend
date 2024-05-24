@@ -1,8 +1,8 @@
 from flask import Blueprint, jsonify, request
 from flask_cors import cross_origin
+from services.SaveFileService import SaveFile
 
-from blueprints.models.saveFile import upload_file
-from blueprints.models.bot import Bot
+from services.CorpusBotService import Bot
 
 chatbotResponse_bp = Blueprint('chatbotResponse', __name__)
 
@@ -15,7 +15,7 @@ def chatbot_response():
 
     if request.method == "POST":
         if 'file' in request.files:
-            upload_file(request.files['file'])
+            SaveFile.upload_file(request.files['file'])
 
         user_response = request.json.get("message")
         if user_response:
