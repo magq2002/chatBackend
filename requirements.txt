@@ -2,3 +2,10 @@ flask
 nltk
 scikit-learn
 flask-cors
+flask-pymongo
+pydantic
+boto3
+python-dotenv
+pyaudio
+SpeechRecognition
+pyttsx3
