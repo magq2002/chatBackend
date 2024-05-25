@@ -1,8 +1,8 @@
 from flask import Blueprint, jsonify, request
 from flask_cors import cross_origin
 
-from blueprints.models.saveFile import upload_file
-from blueprints.models.bot import Bot
+from app.models.saveFile import upload_file
+from app.models.bot import Bot
 
 chatbotResponse_bp = Blueprint('chatbotResponse', __name__)
 
@@ -17,7 +17,7 @@ def chatbot_response():
         if 'file' in request.files:
             upload_file(request.files['file'])
 
-        user_response = request.json.get("message")
+        user_response = request.json.get("messages")
         if user_response:
             user_response = user_response.lower()
 
