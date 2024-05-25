@@ -10,8 +10,9 @@ voice_messages_bp = Blueprint('voice_messages_bp', __name__)
 def post_voice_message():
     if 'audio' in request.files:
         audio = request.files['audio']
+        user = request.form.get('user_id')
         #, text=convert_audio_to_text(audio)
-        new_message = MessageModel(name_audio=save_audio_to_s3(audio), is_audio=True)
+        new_message = MessageModel(name_audio=save_audio_to_s3(audio), is_audio=True, user=user)
         message_id = new_message.save()
         return jsonify({'message_id': message_id}), 200
     else:
