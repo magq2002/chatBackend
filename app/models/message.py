@@ -3,18 +3,20 @@ from flask_pymongo import ObjectId
 
 
 class MessageModel:
-    def __init__(self, text=None, name_audio=None, is_audio=False, timestamp=datetime.now()):
+    def __init__(self, text=None, name_audio=None, is_audio=False, timestamp=datetime.now(), user=None):
         self.text = text
         self.name_audio = name_audio
         self.is_audio = is_audio
         self.timestamp = timestamp
+        self.user = user
 
     def to_dict(self):
         return {
             "text": self.text,
             "name_audio": self.name_audio,
             "is_audio": self.is_audio,
-            "timestamp": self.timestamp
+            "timestamp": self.timestamp,
+            "user": self.user
         }
 
     def save(self):
