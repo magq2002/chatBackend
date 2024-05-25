@@ -9,6 +9,7 @@ load_dotenv()
 
 mongo = PyMongo()
 
+
 def create_app():
     app = Flask(__name__)
     app.config.from_object(Config)
@@ -17,5 +18,6 @@ def create_app():
 
     app.register_blueprint(messages_bp, url_prefix='/messages')
     app.register_blueprint(voice_messages_bp, url_prefix='/voice_messages')
+
 
     return app
