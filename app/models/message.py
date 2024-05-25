@@ -1,6 +1,7 @@
 from datetime import datetime
 from flask_pymongo import ObjectId
 
+
 class MessageModel:
     def __init__(self, text=None, name_audio=None, is_audio=False, timestamp=datetime.now()):
         self.text = text
