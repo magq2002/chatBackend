@@ -1,8 +1,10 @@
 from flask import Blueprint, request, jsonify
 from flask_cors import cross_origin
+
 from app.models.message import MessageModel
 from app.services.s3_service import upload_file_to_s3
 from app.services.conversion_service import convert_audio_to_text
+from app.models.ChatBotCorpus import Bot
 import os
 
 voice_messages_bp = Blueprint('voice_messages_bp', __name__)
@@ -18,6 +20,7 @@ def post_voice_message():
         audio_stream = audio.stream.read()
         audio.stream.seek(0)
 
+        # Save audio in folder
         UPLOAD_FOLDER = 'static/uploads'
         if not os.path.exists(UPLOAD_FOLDER):
             os.makedirs(UPLOAD_FOLDER)
@@ -26,7 +29,7 @@ def post_voice_message():
             f.write(audio_stream)
 
         try:
-            text=convert_audio_to_text(file_path)
+            text = convert_audio_to_text(file_path)
         except Exception as e:
             os.remove(file_path)
             text = 'No fui capaz de entenderte, podrias volver a intentarlo'
@@ -37,10 +40,21 @@ def post_voice_message():
         os.remove(file_path)
         name_audio = save_audio_to_s3(audio)
 
+        # Obtén la respuesta del chatbot
+        print(text)
+        chatbot = Bot(os.path.join('static', 'corpus_deporte.txt'))
+        bot_response = chatbot.response(text)
+        print(bot_response)
 
-        new_message = MessageModel(name_audio=name_audio, is_audio=True, user=user, text=text)
-        message_id = new_message.save()
-        return jsonify({'_id': message_id}), 200
+        # Guarda el mensaje de voz y su transcripción
+        question_message = MessageModel(name_audio=name_audio, is_audio=True, user=user, text=text)
+        user_message_id = question_message.save()
+
+        # Guarda la respuesta del chatbot
+        answer_message = MessageModel(text=bot_response, is_audio=False, user=None)
+        chatbot_message_id = answer_message.save()
+
+        return jsonify({'_id': user_message_id, 'id_': chatbot_message_id}), 200
     else:
         return jsonify({'error': 'No audio file found'}), 400
 
