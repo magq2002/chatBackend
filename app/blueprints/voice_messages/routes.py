@@ -3,7 +3,7 @@ from flask_cors import cross_origin
 
 from app.models.message import MessageModel
 from app.services.s3_service import upload_file_to_s3
-from app.services.conversion_service import convert_audio_to_text
+from app.services.conversion_service import convert_audio_to_text, convert_text_to_audio
 from app.models.ChatBotCorpus import Bot
 import os
 
@@ -29,32 +29,40 @@ def post_voice_message():
             f.write(audio_stream)
 
         try:
-            text = convert_audio_to_text(file_path)
+            user_text = convert_audio_to_text(file_path)
         except Exception as e:
             os.remove(file_path)
-            text = 'No fui capaz de entenderte, podrias volver a intentarlo'
-            new_message = MessageModel(text=text, is_audio=False, user=2)
+            user_text = 'No fui capaz de entenderte, podrías volver a intentarlo'
+            new_message = MessageModel(text=user_text, is_audio=False, user=2)
             message_id = new_message.save()
             return jsonify({'_id': message_id}), 200
 
         os.remove(file_path)
-        name_audio = save_audio_to_s3(audio)
-
-        # Obtén la respuesta del chatbot
-        print(text)
-        chatbot = Bot(os.path.join('static', 'corpus_deporte.txt'))
-        bot_response = chatbot.response(text)
-        print(bot_response)
+        user_audio = save_audio_to_s3(audio)
 
         # Guarda el mensaje de voz y su transcripción
-        question_message = MessageModel(name_audio=name_audio, is_audio=True, user=user, text=text)
+        question_message = MessageModel(name_audio=user_audio, is_audio=True, user=user, text=user_text)
         user_message_id = question_message.save()
 
-        # Guarda la respuesta del chatbot
-        answer_message = MessageModel(text=bot_response, is_audio=False, user=None)
+        # Obtén la respuesta del chatbot
+        print(user_text)
+        chatbot = Bot(os.path.join('static', 'corpus_deporte.txt'))
+        bot_response = chatbot.response(user_text)
+        print(bot_response)
+
+        # Pasar respuesta de texto a audio
+        # try:
+        #     chatbot_audio = convert_text_to_audio(bot_response)
+        # except Exception as e:
+        #     error_message = 'Error al convertir la respuesta a audio. Por favor, intenta nuevamente.'
+        #     error_message_model = MessageModel(text=error_message, is_audio=False, user=2)
+        #     error_message_id = error_message_model.save()
+        #     return jsonify({'_id': error_message_id}), 200
+
+        answer_message = MessageModel(is_audio=False, user=2, text=bot_response)
         chatbot_message_id = answer_message.save()
 
-        return jsonify({'_id': user_message_id, 'id_': chatbot_message_id}), 200
+        return jsonify({'_id': user_message_id}, {'_id': chatbot_message_id}), 200
     else:
         return jsonify({'error': 'No audio file found'}), 400
 
