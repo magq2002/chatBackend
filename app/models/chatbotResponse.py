@@ -2,7 +2,7 @@ from flask import Blueprint, jsonify, request
 from flask_cors import cross_origin
 
 from app.models.saveFile import upload_file
-from app.models.bot import Bot
+from app.models.ChatBotCorpus import Bot
 
 chatbotResponse_bp = Blueprint('chatbotResponse', __name__)
 
