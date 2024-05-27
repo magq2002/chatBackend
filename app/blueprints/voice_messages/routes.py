@@ -51,13 +51,15 @@ def post_voice_message():
         print(bot_response)
 
         # Pasar respuesta de texto a audio
-        # try:
-        #     chatbot_audio = convert_text_to_audio(bot_response)
-        # except Exception as e:
-        #     error_message = 'Error al convertir la respuesta a audio. Por favor, intenta nuevamente.'
-        #     error_message_model = MessageModel(text=error_message, is_audio=False, user=2)
-        #     error_message_id = error_message_model.save()
-        #     return jsonify({'_id': error_message_id}), 200
+        try:
+            chatbot_audio = convert_text_to_audio('lionel messi: futbolista argentino, considerado uno de los mejores jugadores de todos los tiempos.')
+            answer_message = MessageModel(name_audio=chatbot_audio, is_audio=True, user=2, text=bot_response)
+            chatbot_message_id = answer_message.save()
+        except Exception as e:
+            error_message = 'Error al convertir la respuesta a audio. Por favor, intenta nuevamente.'
+            error_message_model = MessageModel(text=error_message, is_audio=False, user=2)
+            error_message_id = error_message_model.save()
+            return jsonify({'_id': error_message_id}), 200
 
         answer_message = MessageModel(is_audio=False, user=2, text=bot_response)
         chatbot_message_id = answer_message.save()
