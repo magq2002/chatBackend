@@ -29,5 +29,6 @@ def convert_text_to_audio(text):
 
     upload_file_to_s3(temp_audio_file)
     os.unlink(temp_audio_path)
+    return temp_audio_path
 
 
