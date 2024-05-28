@@ -1,9 +1,11 @@
-from flask import Blueprint, request, jsonify
 from flask_cors import cross_origin
 
+from app.models.chatbotResponse import chatbot_text_response
 from app.models.message import MessageModel
 from pydantic import ValidationError
 from bson.objectid import ObjectId
+
+from flask import Blueprint, jsonify, request
 
 
 messages_bp = Blueprint('messages_bp', __name__)
@@ -15,9 +17,11 @@ def postMessageText():
     try:
         text = request.json['text']
         user = request.json['user']
-        new_message = MessageModel(text=text, is_audio=False, user=user)
-        message_id = new_message.save()
-        return jsonify({'_id': message_id}), 200
+
+        response = chatbot_text_response(text, user)
+
+        return response
+
     except ValidationError as e:
         return jsonify({'error': e}), 400
 
