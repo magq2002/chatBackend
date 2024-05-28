@@ -37,6 +37,5 @@ class BotBert:
         logits = outputs.logits
         predicted_label_idx = torch.argmax(logits, dim=1).item()
 
-        # Buscar la respuesta en el corpus basada en el índice predicho
         response = self.corpus.get(str(predicted_label_idx), "Lo siento, no tengo respuesta a tu pregunta.")
         return response
