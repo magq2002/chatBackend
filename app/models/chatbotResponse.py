@@ -24,11 +24,18 @@ def chatbot_audio_response(audio, user):
     try:
         user_text = convert_audio_to_text(file_path)
     except Exception as e:
-        os.remove(file_path)
         user_text = 'No fui capaz de entenderte, podrías volver a intentarlo'
         new_message = MessageModel(text=user_text, is_audio=False, user=2)
-        message_id = new_message.save()
-        return jsonify({'_id': message_id}), 200
+        chatbot_message_id = new_message.save()
+
+        os.remove(file_path)
+        user_audio = save_audio_to_s3(audio)
+
+        # Guarda el mensaje de voz y su transcripción
+        question_message = MessageModel(name_audio=user_audio, is_audio=True, user=user, text=user_text)
+        message_id = question_message.save()
+
+        return jsonify({'_id': message_id, '_idChat': chatbot_message_id}), 200
 
     os.remove(file_path)
     user_audio = save_audio_to_s3(audio)
@@ -56,7 +63,7 @@ def chatbot_audio_response(audio, user):
         error_message_id = error_message_model.save()
         return jsonify({'_id': error_message_id}), 200
 
-    return jsonify({'_id': user_message_id}, {'_id': chatbot_message_id}), 200
+    return jsonify({'_id': user_message_id, '_idChat': chatbot_message_id}), 200
 
 
 def chatbot_text_response(text, user):
@@ -74,7 +81,7 @@ def chatbot_text_response(text, user):
 
     answer_message = MessageModel(is_audio=False, user=2, text=bot_response)
     chatbot_message_id = answer_message.save()
-    return jsonify({'_id': message_id}, {'_id': chatbot_message_id}), 200
+    return jsonify({'_id': message_id, '_idChat': chatbot_message_id}), 200
 
 
 def save_audio_to_s3(audio):

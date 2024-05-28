@@ -26,13 +26,19 @@ def postMessageText():
         return jsonify({'error': e}), 400
 
 
-@messages_bp.route('/<message_id>', methods=['GET'])
+@messages_bp.route('/<message_id>/<messageChat_id>', methods=['GET'])
 @cross_origin(origins='http://localhost:4200')
-def get_voice_message(message_id):
+def get_voice_message(message_id, messageChat_id):
     message = MessageModel.find_by_id(message_id)
+    messageChat = MessageModel.find_by_id(messageChat_id)
     if not message:
         return jsonify({'error': 'Message not found'}), 404
-    return jsonify(message.to_dict())
+
+    response = {
+        "message": message.to_dict(),
+        "messageChat": messageChat.to_dict()
+    }
+    return jsonify(response)
 
 
 @messages_bp.route('/', methods=['GET'])
