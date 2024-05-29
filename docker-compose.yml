@@ -8,11 +8,11 @@ services:
     depends_on:
       - mongo
     environment:
-      - MONGO_URI=${MONGO_URI}
-      - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
-      - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
-      - AWS_S3_BUCKET=${AWS_S3_BUCKET}
-      - AWS_S3_REGION=${AWS_S3_REGION}
+      MONGO_URI: mongodb://mongo:27017/mydatabase
+      AWS_ACCESS_KEY_ID: AKIAZQ3DOL52MZUDY5RQ
+      AWS_SECRET_ACCESS_KEY: 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
+      AWS_S3_BUCKET: chatbotplnflask
+      AWS_S3_REGION: us-west-2
     networks:
       - mynetwork
 

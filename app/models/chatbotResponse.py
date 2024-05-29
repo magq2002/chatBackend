@@ -32,7 +32,7 @@ def chatbot_audio_response(audio, user):
 
     chatbot_message_id=response_text_to_audio(bot_response)
 
-    return jsonify({'_id': user_message_id, '_idChat': chatbot_message_id}), 200
+    return jsonify({'_id': user_message_id, '_idChat': chatbot_message_id})
 
 
 def chatbot_text_response(text, user):
@@ -49,7 +49,7 @@ def chatbot_text_response(text, user):
     answer_message = MessageModel(is_audio=False, user=2, text=bot_response)
     chatbot_message_id = answer_message.save()
     
-    return jsonify({'_id': message_id, '_idChat': chatbot_message_id}), 200
+    return jsonify({'_id': message_id, '_idChat': chatbot_message_id})
 
 
 def save_audio_to_s3(audio):
@@ -72,7 +72,7 @@ def request_audio_to_text(file_path, audio, user):
         question_message = MessageModel(name_audio=user_audio, is_audio=True, user=user, text=user_text)
         message_id = question_message.save()
 
-        return jsonify({'_id': message_id, '_idChat': chatbot_message_id}), 200
+        return jsonify({'_id': message_id, '_idChat': chatbot_message_id})
 
 
 def save_user_audio(file_path, audio, user, user_text):
@@ -95,4 +95,4 @@ def response_text_to_audio(bot_response):
         error_message = 'Error al convertir la respuesta a audio. Por favor, intenta nuevamente.'
         error_message_model = MessageModel(text=error_message, is_audio=False, user=2)
         error_message_id = error_message_model.save()
-        return jsonify({'_id': error_message_id}), 200
+        return jsonify({'_id': error_message_id})
