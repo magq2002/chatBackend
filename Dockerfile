@@ -13,4 +13,4 @@ RUN python -m nltk.downloader punkt wordnet stopwords
 COPY . .
 
 # Inicia la aplicación
-CMD ["gunicorn", "--bind", "0.0.0.0:$PORT", "wsgi:app"]
+CMD ["gunicorn", "--bind", "0.0.0.0:${PORT}", "wsgi:app"]
