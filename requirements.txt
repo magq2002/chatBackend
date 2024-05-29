@@ -12,3 +12,4 @@ torch
 unidecode
 transformers
 gunicorn
+pyaudio
